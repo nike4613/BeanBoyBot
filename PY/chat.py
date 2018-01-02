@@ -93,15 +93,16 @@ class TwitchChatBot(SimpleIRCClient):
     def handle_commands(self, conn, name, argv, ispub):
         if argv[0] in self.pub_commands:
             if ispub:
-                self.pub_commands[argv[0]](self, name, argv[0], argv[1:])
-            else:
+                self.pub_commands[argv[0]](self, name, argv[0], argv[1:], "public")
+                return
+            elif argv[0] not in self.priv_commands:
                 self.send_whisper(name, text.msg_public_command(cmd=argv[0],priv_pre=self.priv_prefix))
-            return
+                return
         if argv[0] in self.priv_commands:
             if ispub:
                 self.send_message(text.msg_private_command(cmd=argv[0],pub_pre=self.pub_prefix))
             else:
-                self.priv_commands[argv[0]](self, name, argv[0], argv[1:])
+                self.priv_commands[argv[0]](self, name, argv[0], argv[1:], "private")
             return
         if ispub:
             self.send_message(text.msg_unknown_command(cmd=argv[0],priv_pre=self.pub_prefix))
@@ -120,6 +121,7 @@ class TwitchChatBot(SimpleIRCClient):
     def send_message(self, message, target=None):
         if target is None:
             target = self.target_channel
+        print("SEND '" + message.replace('\r','').replace('\n','') + "' TO " + target)
         self.connection.privmsg(target, message.replace('\r','').replace('\n',''))
     def send_whisper(self, target, message):
         if CAP_COMMANDS in self.caps:
@@ -131,14 +133,15 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
     
 def _register_commands(bot):
-    def cmd_help(bot, user, cmd, args):
+    def cmd_help(bot, user, cmd, args, mode):
         """% lists commands, and provides more info on them.
         [{% [command]}]"""
         #bot.send_whisper(user, "I am a Twitch bot written in Python to replace BeanSSBM's Java bot. I currently can do very little.")
         if len(args) == 0:
             publ = ', '.join([bot.pub_prefix + s for s in bot.pub_commands.keys()])
             priv = ', '.join([bot.priv_prefix + s for s in bot.priv_commands.keys()])
-            bot.send_whisper(user, text.msg_help(public=publ, privat=priv))
+            bot.send_whisper(user, text.msg_help(public=publ, privat=priv) \
+                + ((" | " + text.msg_help_please_use_whisper) if mode == "public" else ""))
         else:
             cmd = args[0]
             func = None
@@ -169,13 +172,15 @@ def _register_commands(bot):
             if srch is not None:
                 gr0 = srch.group(1)
             
-            bot.send_whisper(user, text.help_command(usage=gr0,pubpriv=pp,doc=doc))     
-    def cmd_talktome(bot, user, cmd, args):
+            bot.send_whisper(user, text.help_command(usage=gr0,pubpriv=pp,doc=doc)\
+                + ((" | " + text.msg_help_please_use_whisper) if mode == "public" else ""))     
+    def cmd_talktome(bot, user, cmd, args, mode):
         """% whispers the user to make it easy to open.
         [{%}]"""
         bot.send_whisper(user, text.msg_talktome(name=user))
         
     bot.register_private_command("help", cmd_help)
+    bot.register_public_command("help", cmd_help)
     bot.register_public_command("talktome", cmd_talktome)
     
     import commands

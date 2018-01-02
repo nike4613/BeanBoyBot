@@ -1,4 +1,4 @@
-# texts
+# texts
 global_with = "with"
 global_without = "without"
 
@@ -29,7 +29,12 @@ msg_unknown_command = "Unknown command '{cmd}'. Please whisper '{priv_pre}help' 
 msg_private_command = "The command '{cmd}' is whisper-only. Use '{pub_pre}talktome' to easily get a whisper chat window open."
 msg_public_command = "The command '{cmd}' is main-chat only. Please see the '{priv_pre}help' command."
 
-msg_help = "Chat commands: {public} ; Whisper commands: {privat}"
+msg_help = "Chat commands: {public} | Whisper commands: {privat}"
+msg_help_please_use_whisper = "Please use whispers for as many future actions as you can to keep chat clean."
+
+msg_join_already_joined = "You are already in the game!"
+msg_join_joining = "Welcome to The Game! You start with 100 points. Don't waste them!"
+msg_join_welcome = "Please welcome {player}, a brand new player in The Game!"
 
 help_public_command = "{cmd} is a chat command."
 help_private_command = "{cmd} is a whisper command."

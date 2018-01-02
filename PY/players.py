@@ -30,14 +30,14 @@ class PlayerHandler(object):
         if self.player_is_playing(player):
             raise PlayerExistsError("Player " + player + "is already playing")
             
-        ply = {name:player,points:100,state:PlayerState.NONE,invested:0,split:-1}
+        ply = {'name':player,'points':1000,'state':PlayerState.NONE,'invested':0,'split':-1}
         self.players[player] = ply
     def save_to_file(self, file):
         with open(file, 'wb') as f:
             pickle.dump(self.players, f)
     def save_to_java_format(self, file):
         with open(file, 'w') as f:
-            lines = ["{}:{}:{}:{}".format(p.name,p.points,p.state.uuid.int,p.invested) for n,p in self.players.items()]
+            lines = ["{}:{}:{}:{}".format(p['name'],p['points'],p['state'].uuid.int,p['invested']) for n,p in self.players.items()]
             f.writelines(lines)
     def load_from_file(self, file):
         with open(file, 'rb') as f:
@@ -46,41 +46,41 @@ class PlayerHandler(object):
     def load_from_java_format(self, file):
         with open(file, 'r') as f:
             lines = f.readlines()
-            lmb = lambda s: {name:s[0],points:int(s[1]),state:PlayerState(int(s[3])),invested:s[4],split:-1}
+            lmb = lambda s: {'name':s[0],'points':int(s[1]),'state':PlayerState(int(s[3])),'invested':s[4],'split':-1}
             plyl = [lmb(l.split(':')) for l in lines]
             for o in plyl:
                 self.players[o.name] = o
         self.order_players()
     def set_begin_split(self, split):
         for k,p in self.players.items():
-            if p.state == PlayerState.INVESTED:
-                p.split = split
+            if p['state'] == PlayerState.INVESTED:
+                p['split'] = split
     def get_player_invested(self, player):
-        return self.players[player].invested
+        return self.players[player]['invested']
     def set_player_invested(self, player, invest):
-        self.players[player].invested = invest
+        self.players[player]['invested'] = invest
     def give_all_invested(self, points):
         for k,p in self.players.items():
-            if p.state == PlayerState.INVESTED:
-                self.add_points(p.name,points)
+            if p['state'] == PlayerState.INVESTED:
+                self.add_points(p['name'],points)
     def get_investors(self):
-        return sum([p.state != PlayerState.NONE for n,p in self.players.items()]) # True == 1
+        return sum([p['state'] != PlayerState.NONE for n,p in self.players.items()]) # True == 1
     def get_points(self, player):
-        return self.players[player].points
+        return self.players[player]['points']
     def add_points(self, player, amount): # a removal is just adding a negative value
-        self.players[player].points += amount
-        if self.players[player].points < 0:
-            self.players[player].points = 0
+        self.players[player]['points'] += amount
+        if self.players[player]['points'] < 0:
+            self.players[player]['points'] = 0
         # handle limits
         # low is the only one set (@30)
-        if self.players[player].points < 30:
+        if self.players[player]['points'] < 30:
             self.bot.send_whisper(player, text.msg_low_points(player=player))
     def set_player_state(self, player, state):
-        self.players[player].state = state
+        self.players[player]['state'] = state
     def get_player_state(self, player):
-        return self.players[player].state
+        return self.players[player]['state']
     def order_players(self):
-        self.player_order = sorted(self.players.keys(),key=lambda s:self.players[s].points)[::-1]
+        self.player_order = sorted(self.players.keys(),key=lambda s:self.players[s]['points'])[::-1]
     def get_player_placement(self, player): 
         self.order_players()
         
@@ -96,7 +96,7 @@ class PlayerHandler(object):
         for i, p in enumerate(top):
             if out != "":
                 out += " | "
-            out += "#{}: {} with {}".format(i+1,p.name, p.points)
+            out += "#{}: {} with {}".format(i+1,p['name'], p['points'])
             
         return out
         

@@ -1,13 +1,15 @@
 import quotes
 import players
 import text
+import pointsgame
 
 def register(bot):
     bot.player_handler = players.PlayerHandler(bot)
     
     bot.register_private_command("gamble", cmd_gamble)
+    pointsgame.register(bot)
     
-def cmd_gamble(bot, user, cmd, args):
+def cmd_gamble(bot, user, cmd, args, mode):
     """Gamble your life savings away with this ONE SIMPLE TRICK! may cause a mild case of death Kappa
     [{% amount}]"""
     if not bot.player_handler.player_is_playing(user):
