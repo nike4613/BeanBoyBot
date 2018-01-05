@@ -63,7 +63,8 @@ def main():
     try:
         bot.start()
     except:
-        bot.split_conn.close()
+        if bot.split_conn is not None:
+            bot.split_conn.close()
         bot.connection.close()
         bot.player_handler.save_to_file(emr_player_info)
         quotes.save(emr_quotes)
