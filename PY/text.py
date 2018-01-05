@@ -42,6 +42,10 @@ help_command = "usage: {usage} | {doc}"
 
 msg_talktome = "Hi, {name}! From now on, please talk to me in this window to keep the main chat clear. If you want to know what I can do, go ahead and use the 'help' command."
 
+dbg_connecting_split = "Attempting to connect to LiveSplit server at {host}:{port}"
+dbg_split_connected = "Connected sucessfully to LiveSplit server"
+dbg_split_timeout = "Connection to LiveSplit server timed out, disabling functionality"
+dbg_split_refused = "Connection to LiveSplit server refused, disabling functionality"
 dbg_bot_connecting = "Connecting to Twitch IRC on port {port} as '{nick}' {wov6} IPv6 and {wossl} SSL."
 dbg_cap_acknowledged = "CAP {cap} registered"
 err_cap_nak = "ERROR: CAP {cap} not granted"

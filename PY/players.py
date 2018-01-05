@@ -30,7 +30,7 @@ class PlayerHandler(object):
         if self.player_is_playing(player):
             raise PlayerExistsError("Player " + player + "is already playing")
             
-        ply = {'name':player,'points':1000,'state':PlayerState.NONE,'invested':0,'split':-1}
+        ply = {'name':player,'points':100,'state':PlayerState.NONE,'invested':0,'split':-1}
         self.players[player] = ply
     def save_to_file(self, file):
         with open(file, 'wb') as f:

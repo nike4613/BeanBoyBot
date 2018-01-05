@@ -1,9 +1,11 @@
 import irc.client
 import http.server
 import argparse
+import socket
 
 import chat
 import text
+import livesplit
 
 
 def arg_parse():
@@ -34,8 +36,28 @@ def main():
     
     bot.reactor.add_global_handler("all_events", print, 0) # this prints all events
     
+    bot.split_conn_def = (args.split_host, args.split_port)
+    bot.split_conn = None
+    try:
+        print(text.dbg_connecting_split(host=bot.split_conn_def[0],port=bot.split_conn_def[1]))
+        bot.split_conn = socket.create_connection(bot.split_conn_def, 5)
+        print(text.dbg_split_connected)
+    except socket.timeout:
+        eprint(text.dbg_split_timeout)
+    except ConnectionRefusedError:
+        eprint(text.dbg_split_refused)
+        
     bot.connect()
-    bot.start()
+    try:
+        bot.start()
+    except:
+        bot.split_conn.close()
+        bot.connection.close()
+        raise
     
+def eprint(*args, **kwargs):
+    import sys
+    print(*args, file=sys.stderr, **kwargs) 
+
 if __name__ == "__main__":
     main()
