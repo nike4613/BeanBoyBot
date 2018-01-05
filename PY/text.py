@@ -42,6 +42,8 @@ help_command = "usage: {usage} | {doc}"
 
 msg_talktome = "Hi, {name}! From now on, please talk to me in this window to keep the main chat clear. If you want to know what I can do, go ahead and use the 'help' command."
 
+dbg_load_emr_playerinfo = "Emergency save player info found; restoring"
+dbg_load_emr_quotes = "Emergency save quotes found; restoring"
 dbg_connecting_split = "Attempting to connect to LiveSplit server at {host}:{port}"
 dbg_split_connected = "Connected sucessfully to LiveSplit server"
 dbg_split_timeout = "Connection to LiveSplit server timed out, disabling functionality"

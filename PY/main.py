@@ -1,12 +1,14 @@
 import irc.client
-import http.server
 import argparse
 import socket
 
 import chat
 import text
 import livesplit
+import quotes
 
+emr_player_info = '._player_info_emr'
+emr_quotes = '._quotes_emr'
 
 def arg_parse():
     parser = argparse.ArgumentParser(description='')
@@ -36,6 +38,14 @@ def main():
     
     bot.reactor.add_global_handler("all_events", print, 0) # this prints all events
     
+    import os.path
+    if os.path.isfile(emr_player_info):
+        print(text.dbg_load_emr_playerinfo)
+        bot.player_handler.load_from_file(emr_player_info)
+    if os.path.isfile(emr_quotes):
+        print(text.dbg_load_emr_quotes)
+        quotes.load(emr_quotes)
+    
     bot.split_conn_def = (args.split_host, args.split_port)
     bot.split_conn = None
     bot.split_client = None
@@ -55,6 +65,8 @@ def main():
     except:
         bot.split_conn.close()
         bot.connection.close()
+        bot.player_handler.save_to_file(emr_player_info)
+        quotes.save(emr_quotes)
         raise
     
 def eprint(*args, **kwargs):
