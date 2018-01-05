@@ -24,6 +24,8 @@ msg_gamble_cant_gamble_words = "Hey now. You can't go gambling words."
 
 msg_not_enough_points = "You don't have enough points to {action}."
 msg_not_playing = "You have to be playing to do that."
+
+msg_get_points = "You have {points} points."
                     
 msg_unknown_command = "Unknown command '{cmd}'. Please whisper '{priv_pre}help' for a list of commands."
 msg_private_command = "The command '{cmd}' is whisper-only. Use '{pub_pre}talktome' to easily get a whisper chat window open."

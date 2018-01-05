@@ -6,7 +6,7 @@ class LiveSplitClient(object):
     def __init__(self, conn):   
         self.conn = conn
         self.queue = Queue()
-        self.thread = threads.Thread(target=self._worker)
+        self.thread = threads.Thread(target=self._worker,daemon=True)
         #self.thread.start() # Unused for now. 
     def run_command(self, name, *args, block=True, callback=lambda res:None):
         cmdl = ' '.join([name]+args).replace('\r\n','\n')

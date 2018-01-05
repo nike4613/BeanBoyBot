@@ -25,6 +25,8 @@ class TwitchChatBot(SimpleIRCClient):
         
         self.caps = []
         
+        self.users = set()
+        
         _register_commands(self)
         
     def connect(self):
@@ -81,6 +83,8 @@ class TwitchChatBot(SimpleIRCClient):
         """
         nm = NickMask(evt.source)
         name = nm.nick
+        if name not in self.users:
+            self.users.add(name)
         message = ' '.join(evt.arguments)
         print("MESSAGE:", message, "FROM:", name)
         if message.startswith(self.pub_prefix): 
@@ -109,6 +113,18 @@ class TwitchChatBot(SimpleIRCClient):
         else:
             self.send_whisper(name, text.msg_unknown_command(cmd=argv[0],priv_pre=self.priv_prefix))
         
+    def on_join(self, conn, evt):
+        nm = NickMask(evt.source)
+        name = nm.nick
+        self.users.add(name)
+    def on_part(self, conn, evt):
+        nm = NickMask(evt.source)
+        name = nm.nick
+        self.users.discard(name)
+        
+    def get_users(self):
+        return frozenset(self.users)
+        
     def set_public_prefix(self, pre):
         self.pub_prefix = pre
     def set_private_prefix(self, pre):
@@ -120,7 +136,7 @@ class TwitchChatBot(SimpleIRCClient):
         
     def send_message(self, message, target=None):
         if target is None:
-            target = self.target_channel
+            target = target = self.target_channel
         print("SEND '" + message.replace('\r','').replace('\n','') + "' TO " + target)
         self.connection.privmsg(target, message.replace('\r','').replace('\n',''))
     def send_whisper(self, target, message):
