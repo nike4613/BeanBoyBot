@@ -38,9 +38,11 @@ def main():
     
     bot.split_conn_def = (args.split_host, args.split_port)
     bot.split_conn = None
+    bot.split_client = None
     try:
         print(text.dbg_connecting_split(host=bot.split_conn_def[0],port=bot.split_conn_def[1]))
         bot.split_conn = socket.create_connection(bot.split_conn_def, 5)
+        bot.split_client = livesplit.LiveSplitClient(bot.split_conn)
         print(text.dbg_split_connected)
     except socket.timeout:
         eprint(text.dbg_split_timeout)
