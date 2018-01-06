@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
+from PyQt5.QtCore import QTimer
 from PyQt5 import uic
 import sys
 import os
@@ -20,6 +21,8 @@ class MainGUI(QMainWindow, form_class):
         QMainWindow.__init__(self, None)
         self.setupUi(self)
         
+        self.timed = QTimer(self, timeout=self.clear_status)
+        
         self.bot = bot
         
         self.load_cfg()
@@ -35,6 +38,13 @@ class MainGUI(QMainWindow, form_class):
         else:
             self.forceLoadQuotes()
 
+    def clear_status(self):
+        self.statusBar.showMessage("")
+            
+    def show_status(self, stat):
+        self.statusBar.showMessage(stat)
+        self.timed.start(2000)
+            
     def pickUsersFile(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self,
@@ -60,35 +70,41 @@ class MainGUI(QMainWindow, form_class):
             "Save old users", "","All Files (*)", options=options)
         if fileName:
             self.bot.player_handler.save_to_java_format(fileName)
+            self.show_status("Users saved (Java)")
     def loadOldFormat(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self,
             "Load old users", "","All Files (*)", options=options)
         if fileName:
             self.bot.player_handler.load_from_java_format(fileName)
+            self.show_status("Users loaded (Java)")
             
     def forceSaveUsers(self):
         self.bot.player_handler.save_to_file(self.last_valid_users)
+        self.show_status("Users saved")
     def forceLoadUsers(self):
         self.bot.player_handler.load_from_file(self.last_valid_users)
+        self.show_status("Users loaded")
     def forceSaveQuotes(self):
         quotes.save(self.last_valid_quotes)
+        self.show_status("Quotes saved")
     def forceLoadQuotes(self):
         quotes.load(self.last_valid_quotes)
+        self.show_status("Quotes loaded")
         
     def setUsersFileFinish(self):
-        print(self.editUserFile.text())
         # validate
         if os.path.isfile(self.editUserFile.text()):
             self.last_valid_users = self.editUserFile.text()
+            self.show_status("Users file set to " + self.last_valid_users)
         else:
             self.editUserFile.setText(self.last_valid_users)
             self.setUsersFileFinish()
     def setQuotesFileFinish(self):
-        print(self.editQuotesFile.text())
         # validate
         if os.path.isfile(self.editQuotesFile.text()):
             self.last_valid_quotes = self.editQuotesFile.text()
+            self.show_status("Quotes file set to " + self.last_valid_quotes)
         else:
             self.editQuotesFile.setText(self.last_valid_quotes)
             self.setQuotesFileFinish()
