@@ -38,13 +38,26 @@
        <property name="bottomMargin">
         <number>5</number>
        </property>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pickerQuotesFile">
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="editUserFile"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lblUserFile">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
          <property name="text">
           <string>User file</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editUserFile</cstring>
@@ -67,7 +80,7 @@
        <item row="0" column="2">
         <widget class="QPushButton" name="pickerUserFile">
          <property name="text">
-          <string>File Picker</string>
+          <string>Select</string>
          </property>
         </widget>
        </item>
@@ -75,6 +88,9 @@
         <widget class="QLabel" name="lblQuotesFile">
          <property name="text">
           <string>Quotes file</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editQuotesFile</cstring>
@@ -84,10 +100,31 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="editQuotesFile"/>
        </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="pickerQuotesFile">
+       <item row="0" column="3">
+        <widget class="QPushButton" name="saveUsers">
          <property name="text">
-          <string>File Picker</string>
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="loadUsers">
+         <property name="text">
+          <string>Load</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QPushButton" name="saveQuotes">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="loadQuotes">
+         <property name="text">
+          <string>Load</string>
          </property>
         </widget>
        </item>
@@ -110,7 +147,7 @@
        <item row="0" column="1">
         <widget class="QPushButton" name="pickerOldUserFile">
          <property name="text">
-          <string>File Picker</string>
+          <string>Load</string>
          </property>
         </widget>
        </item>
@@ -150,7 +187,7 @@
        <item row="1" column="1">
         <widget class="QPushButton" name="pickerSaveOldUserFile">
          <property name="text">
-          <string>File Picker</string>
+          <string>Save</string>
          </property>
         </widget>
        </item>
@@ -276,15 +313,81 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>saveUsers</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>forceSaveUsers()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>626</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadUsers</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>forceLoadUsers()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>707</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveQuotes</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>forceSaveQuotes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>626</x>
+     <y>67</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadQuotes</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>forceLoadQuotes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>707</x>
+     <y>67</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>pickUsersFile()</slot>
   <slot>pickQuotesFile()</slot>
-  <slot>setUsersFile(QString)</slot>
-  <slot>setQuotesFile(QString)</slot>
   <slot>loadOldFormat()</slot>
   <slot>saveOldFormat()</slot>
   <slot>setUsersFileFinish()</slot>
   <slot>setQuotesFileFinish()</slot>
+  <slot>forceSaveUsers()</slot>
+  <slot>forceSaveQuotes()</slot>
+  <slot>forceLoadUsers()</slot>
+  <slot>forceLoadQuotes()</slot>
  </slots>
 </ui>

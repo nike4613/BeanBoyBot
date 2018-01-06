@@ -6,6 +6,7 @@ import chat
 import text
 import livesplit
 import quotes
+import gui
 
 emr_player_info = '._player_info_emr'
 emr_quotes = '._quotes_emr'
@@ -42,33 +43,30 @@ def main():
     if os.path.isfile(emr_player_info):
         print(text.dbg_load_emr_playerinfo)
         bot.player_handler.load_from_file(emr_player_info)
+        os.remove(emr_player_info)
     if os.path.isfile(emr_quotes):
         print(text.dbg_load_emr_quotes)
         quotes.load(emr_quotes)
-    
-    bot.split_conn_def = (args.split_host, args.split_port)
-    bot.split_conn = None
-    bot.split_client = None
-    try:
-        print(text.dbg_connecting_split(host=bot.split_conn_def[0],port=bot.split_conn_def[1]))
-        bot.split_conn = socket.create_connection(bot.split_conn_def, 5)
-        bot.split_client = livesplit.LiveSplitClient(bot.split_conn)
-        print(text.dbg_split_connected)
-    except socket.timeout:
-        eprint(text.dbg_split_timeout)
-    except ConnectionRefusedError:
-        eprint(text.dbg_split_refused)
+        os.remove(emr_quotes)
+        
+    livesplit.init(bot, args.split_host, args.split_port)
+        
+    gui.start_gui(bot)
         
     bot.connect()
     try:
         bot.start()
+    except gui.GuiClosed:
+        pass
     except:
+        import traceback
+        traceback.print_exc()
+        bot.player_handler.save_to_file(emr_player_info)
+        quotes.save(emr_quotes)
+    finally:
         if bot.split_conn is not None:
             bot.split_conn.close()
         bot.connection.close()
-        bot.player_handler.save_to_file(emr_player_info)
-        quotes.save(emr_quotes)
-        raise
     
 def eprint(*args, **kwargs):
     import sys

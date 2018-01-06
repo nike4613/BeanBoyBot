@@ -1,6 +1,21 @@
 import text
 import threading as threads
+import socket
 from queue import Queue, Empty
+
+def init(bot, host, port):
+    bot.split_conn_def = (host, port)
+    bot.split_conn = None
+    bot.split_client = None
+    try:
+        print(text.dbg_connecting_split(host=bot.split_conn_def[0],port=bot.split_conn_def[1]))
+        bot.split_conn = socket.create_connection(bot.split_conn_def, 5)
+        bot.split_client = LiveSplitClient(bot.split_conn)
+        print(text.dbg_split_connected)
+    except socket.timeout:
+        eprint(text.dbg_split_timeout)
+    except ConnectionRefusedError:
+        eprint(text.dbg_split_refused)
 
 class LiveSplitClient(object):
     def __init__(self, conn):   
@@ -74,3 +89,7 @@ class LiveSplitClient(object):
         return self.run_command('getprevioussplitname')
     def split(self):
         return self.run_command('split')
+
+def eprint(*args, **kwargs):
+    import sys
+    print(*args, file=sys.stderr, **kwargs) 

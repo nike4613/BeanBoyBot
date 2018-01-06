@@ -3,6 +3,7 @@ from irc.connection import Factory
 import ssl
 import main, quotes, text
 import sys
+import livesplit
 
 CAP_MEMBERSHIP = 'twitch.tv/membership'
 CAP_COMMANDS = 'twitch.tv/commands'
