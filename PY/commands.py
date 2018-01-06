@@ -8,6 +8,7 @@ def register(bot):
     
     bot.register_private_command("gamble", cmd_gamble)
     pointsgame.register(bot)
+    quotes.register_commands(bot)
     
 def cmd_gamble(bot, user, cmd, args, mode):
     """Gamble your life savings away with this ONE SIMPLE TRICK! may cause a mild case of death Kappa

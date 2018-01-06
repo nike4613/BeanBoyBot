@@ -151,7 +151,7 @@ public class SplitGame extends TimerTask {
 		if (LiveSplitHandler.getCurrentTimerPhase().equals("Running")) {
 			String buffer = LiveSplitHandler.getDelta();
 			if (buffer.contains("−"))
-				buffer = buffer.replaceAll("−", "-");
+				buffer = buffer.replaceAll("−", "-"); // replace UTF-8 minus with ASCII variant
 			d = stringTimeToSeconds(buffer);
 			
 			//System.out.println("Delta - String: " + buffer + " num: " + d);

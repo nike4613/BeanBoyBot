@@ -20,7 +20,7 @@ class TwitchChatBot(SimpleIRCClient):
         self.use_v6 = usev6
         
         self.pub_commands = {}
-        self.pub_prefix = ';'
+        self.pub_prefix = '!'
         self.priv_commands = {}
         self.priv_prefix = ''
         
@@ -154,6 +154,8 @@ def _register_commands(bot):
         """% lists commands, and provides more info on them.
         [{% [command]}]"""
         #bot.send_whisper(user, "I am a Twitch bot written in Python to replace BeanSSBM's Java bot. I currently can do very little.")
+        if mode == 'public':
+            bot.send_message(text.msg_help_mustfollow)
         if len(args) == 0:
             publ = ', '.join([bot.pub_prefix + s for s in bot.pub_commands.keys()])
             priv = ', '.join([bot.priv_prefix + s for s in bot.priv_commands.keys()])

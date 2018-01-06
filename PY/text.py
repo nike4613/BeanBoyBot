@@ -34,9 +34,14 @@ msg_public_command = "The command '{cmd}' is main-chat only. Please see the '{pr
 msg_help = "Chat commands: {public} | Whisper commands: {privat}"
 msg_help_please_use_whisper = "Please use whispers for as many future actions as you can to keep chat clean."
 
+msg_help_mustfollow = "Unfortunately, due to Twitch's strange permissions, you have to follow me to get the whispers that I use to communicate."
+
 msg_join_already_joined = "You are already in the game!"
 msg_join_joining = "Welcome to The Game! You start with 100 points. Don't waste them!"
 msg_join_welcome = "Please welcome {player}, a brand new player in The Game!"
+
+msg_quote_added = "Quote added."
+msg_quote_sent = "Quote sent in main chat."
 
 help_public_command = "{cmd} is a chat command."
 help_private_command = "{cmd} is a whisper command."
